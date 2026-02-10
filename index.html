@@ -10,23 +10,26 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link
-        href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&family=Space+Grotesk:wght@300;400;600;700&display=swap"
+        href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800;900&family=Space+Grotesk:wght@300;400;600;700&display=swap"
         rel="stylesheet">
     <link rel="stylesheet" href="style.css">
     <link rel="icon" type="image/png" href="via-logo.png">
 </head>
 
 <body>
+    <!-- Cursor glow that follows mouse -->
+    <div class="cursor-glow" id="cursorGlow"></div>
 
+    <!-- Navigation -->
     <nav class="navbar">
         <div class="container nav-container">
             <a href="#" class="logo">
                 <img src="via-logo-small.png" alt="VIA Logo">
             </a>
             <ul class="nav-links">
+                <li><a href="#work">Productions</a></li>
                 <li><a href="#about">About</a></li>
                 <li><a href="#partners">Partners</a></li>
-                <li><a href="#work">Work</a></li>
                 <li><a href="#contact">Contact</a></li>
             </ul>
             <div class="hamburger">
@@ -37,221 +40,275 @@
         </div>
     </nav>
 
-    <header class="hero">
-        <div class="hero-overlay"></div>
-        <div class="container hero-content">
-            <h1 class="fade-in-up">The Future of <span class="gradient-text">Visual Storytelling</span></h1>
-            <p class="fade-in-up delay-1">Where Human Artistry Meets Generative Intelligence.</p>
-            <a href="#work" class="btn primary-btn fade-in-up delay-2">View Our Work</a>
+    <!-- Hero Section - Compact, animated -->
+    <header class="hero" id="hero">
+        <canvas id="heroCanvas"></canvas>
+        <div class="hero-content">
+            <div class="hero-tag">
+                <span class="tag-line"></span>
+                <span class="tag-text" data-text="AI VIDEO PRODUCTION">AI VIDEO PRODUCTION</span>
+                <span class="tag-line"></span>
+            </div>
+            <h1>
+                <span class="title-line title-line-1">
+                    <span class="title-word" data-text="Pushing">Pushing</span>
+                    <span class="title-word" data-text="the">the</span>
+                </span>
+                <span class="title-line title-line-2">
+                    <span class="title-word gradient-text" data-text="Frontier">Frontier</span>
+                </span>
+            </h1>
+            <p class="hero-sub">Where human artistry meets generative intelligence</p>
+            <a href="#work" class="hero-cta">
+                <span class="cta-text">See Our Work</span>
+                <svg class="cta-arrow" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                    <path d="M7 17L17 7M17 7H7M17 7V17" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+            </a>
         </div>
-        <div class="hero-background">
-            <!-- Abstract AI generated background video or animation could go here. For now using CSS gradient/noise -->
+        <div class="scroll-indicator" id="scrollIndicator">
+            <div class="scroll-line"></div>
         </div>
     </header>
 
+    <!-- Productions Section - THE MAIN EVENT -->
+    <section id="work" class="work-section">
+        <div class="section-intro">
+            <h2 class="reveal-text" data-reveal>
+                <span class="reveal-line"><span>Our</span></span>
+                <span class="reveal-line"><span class="gradient-text">Productions</span></span>
+            </h2>
+        </div>
+
+        <div class="productions-showcase">
+            <div class="prod-grid">
+                <article class="prod-card prod-card--large" data-tilt>
+                    <div class="prod-card__media">
+                        <video muted loop preload="metadata" playsinline>
+                            <source src="productions/Lucha Clandestina Episodio 1.mp4" type="video/mp4">
+                        </video>
+                        <div class="prod-card__overlay">
+                            <div class="prod-card__play">
+                                <svg viewBox="0 0 48 48" width="48" height="48"><circle cx="24" cy="24" r="23" fill="none" stroke="currentColor" stroke-width="2"/><polygon points="20,16 34,24 20,32" fill="currentColor"/></svg>
+                            </div>
+                        </div>
+                        <div class="prod-card__glow"></div>
+                    </div>
+                    <div class="prod-card__info">
+                        <span class="prod-card__client">Xplora</span>
+                        <h3 class="prod-card__title">Lucha Clandestina</h3>
+                        <p class="prod-card__desc">Pilot for science network Xplora. Post-apocalyptic Quequen, forbidden knowledge. Scripting, character design, animation & sound.</p>
+                    </div>
+                </article>
+
+                <article class="prod-card prod-card--large" data-tilt>
+                    <div class="prod-card__media">
+                        <video muted loop preload="metadata" playsinline>
+                            <source src="productions/Comecocos Episodio 1.mp4" type="video/mp4">
+                        </video>
+                        <div class="prod-card__overlay">
+                            <div class="prod-card__play">
+                                <svg viewBox="0 0 48 48" width="48" height="48"><circle cx="24" cy="24" r="23" fill="none" stroke="currentColor" stroke-width="2"/><polygon points="20,16 34,24 20,32" fill="currentColor"/></svg>
+                            </div>
+                        </div>
+                        <div class="prod-card__glow"></div>
+                    </div>
+                    <div class="prod-card__info">
+                        <span class="prod-card__client">Gelatina</span>
+                        <h3 class="prod-card__title">Comecocos</h3>
+                        <p class="prod-card__desc">Dreamy pilot for streaming giant Gelatina. Inspired by Borges & Cortazar. Visual language, character design, animation & immersive sound.</p>
+                    </div>
+                </article>
+
+                <article class="prod-card" data-tilt>
+                    <div class="prod-card__media">
+                        <video muted loop preload="metadata" playsinline>
+                            <source src="productions/Himno Nacional Argentino - Anda Calabaza.mp4" type="video/mp4">
+                        </video>
+                        <div class="prod-card__overlay">
+                            <div class="prod-card__play">
+                                <svg viewBox="0 0 48 48" width="48" height="48"><circle cx="24" cy="24" r="23" fill="none" stroke="currentColor" stroke-width="2"/><polygon points="20,16 34,24 20,32" fill="currentColor"/></svg>
+                            </div>
+                        </div>
+                        <div class="prod-card__glow"></div>
+                    </div>
+                    <div class="prod-card__info">
+                        <span class="prod-card__client">Anda Calabaza & Fundacion Si</span>
+                        <h3 class="prod-card__title">Argentinian National Anthem</h3>
+                        <p class="prod-card__desc">Animated anthem inviting children into Argentina's story. Original character design, animation & editing.</p>
+                    </div>
+                </article>
+
+                <article class="prod-card" data-tilt>
+                    <div class="prod-card__media">
+                        <video muted loop preload="metadata" playsinline>
+                            <source src="productions/Hipo Hip Hop - Kabradepata.mp4" type="video/mp4">
+                        </video>
+                        <div class="prod-card__overlay">
+                            <div class="prod-card__play">
+                                <svg viewBox="0 0 48 48" width="48" height="48"><circle cx="24" cy="24" r="23" fill="none" stroke="currentColor" stroke-width="2"/><polygon points="20,16 34,24 20,32" fill="currentColor"/></svg>
+                            </div>
+                        </div>
+                        <div class="prod-card__glow"></div>
+                    </div>
+                    <div class="prod-card__info">
+                        <span class="prod-card__client">Kabradepata</span>
+                        <h3 class="prod-card__title">Hipo Hip Hop</h3>
+                        <p class="prod-card__desc">First release of the new album campaign. Filmed the band, built illustrated universes, mixed animation with performance.</p>
+                    </div>
+                </article>
+
+                <article class="prod-card" data-tilt>
+                    <div class="prod-card__media">
+                        <video muted loop preload="metadata" playsinline>
+                            <source src="productions/Fiesta en la Cocina - Kabradepata.mp4" type="video/mp4">
+                        </video>
+                        <div class="prod-card__overlay">
+                            <div class="prod-card__play">
+                                <svg viewBox="0 0 48 48" width="48" height="48"><circle cx="24" cy="24" r="23" fill="none" stroke="currentColor" stroke-width="2"/><polygon points="20,16 34,24 20,32" fill="currentColor"/></svg>
+                            </div>
+                        </div>
+                        <div class="prod-card__glow"></div>
+                    </div>
+                    <div class="prod-card__info">
+                        <span class="prod-card__client">Kabradepata</span>
+                        <h3 class="prod-card__title">Fiesta en la Cocina</h3>
+                        <p class="prod-card__desc">Hand-crafted props, studio choreography, and AI-augmented animation turn a kitchen into a celebration.</p>
+                    </div>
+                </article>
+
+                <article class="prod-card" data-tilt>
+                    <div class="prod-card__media">
+                        <video muted loop preload="metadata" playsinline>
+                            <source src="productions/Viaje a la Luna - Kabradepata.mp4" type="video/mp4">
+                        </video>
+                        <div class="prod-card__overlay">
+                            <div class="prod-card__play">
+                                <svg viewBox="0 0 48 48" width="48" height="48"><circle cx="24" cy="24" r="23" fill="none" stroke="currentColor" stroke-width="2"/><polygon points="20,16 34,24 20,32" fill="currentColor"/></svg>
+                            </div>
+                        </div>
+                        <div class="prod-card__glow"></div>
+                    </div>
+                    <div class="prod-card__info">
+                        <span class="prod-card__client">Kabradepata</span>
+                        <h3 class="prod-card__title">Viaje a la Luna</h3>
+                        <p class="prod-card__desc">Live-action shoots, animated backdrops & a journey alongside the band to the moon.</p>
+                    </div>
+                </article>
+
+                <article class="prod-card" data-tilt>
+                    <div class="prod-card__media">
+                        <video muted loop preload="metadata" playsinline>
+                            <source src="productions/Gurisa, Chajá y Río - Pruebas.mp4" type="video/mp4">
+                        </video>
+                        <div class="prod-card__overlay">
+                            <div class="prod-card__play">
+                                <svg viewBox="0 0 48 48" width="48" height="48"><circle cx="24" cy="24" r="23" fill="none" stroke="currentColor" stroke-width="2"/><polygon points="20,16 34,24 20,32" fill="currentColor"/></svg>
+                            </div>
+                        </div>
+                        <div class="prod-card__glow"></div>
+                        <div class="prod-card__badge">In Progress</div>
+                    </div>
+                    <div class="prod-card__info">
+                        <span class="prod-card__client">Gov. of Entre Rios & El Perro en la Luna</span>
+                        <h3 class="prod-card__title">Gurisa, Chaja y Rio</h3>
+                        <p class="prod-card__desc">Celebrating provincial traditions through stylized animation. Hybrid 2D/3D workflow in development.</p>
+                    </div>
+                </article>
+            </div>
+        </div>
+    </section>
+
+    <!-- Video Lightbox -->
+    <div class="lightbox" id="lightbox">
+        <button class="lightbox__close" id="lightboxClose">
+            <svg width="32" height="32" viewBox="0 0 32 32" fill="none">
+                <line x1="8" y1="8" x2="24" y2="24" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                <line x1="24" y1="8" x2="8" y2="24" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+            </svg>
+        </button>
+        <div class="lightbox__content">
+            <video id="lightboxVideo" controls autoplay></video>
+        </div>
+    </div>
+
+    <!-- About Section - Condensed -->
     <section id="about" class="about-section">
         <div class="container">
-            <div class="section-header fade-in">
-                <h2>Who We Are</h2>
-                <div class="line"></div>
-            </div>
-            <div class="about-content">
-                <div class="about-text fade-in-left">
-                    <p><strong>VIA</strong> is an audiovisual production agency built by filmmakers, designers,
-                        programmers, prompt engineers, screenwriters, musicians, and sound producers who thrive on
-                        experimentation. We make professional videos using AI tools to generate image, video, music,
-                        voices, and more—always guided by human taste and craftsmanship.</p>
-                    <p>Our workflow blends field production with advanced generative systems, so every project benefits
-                        from bespoke direction, art, and sound while tapping into the speed and scale of AI. We are the
-                        people you call when you want cinematic storytelling with the agility of cutting-edge
-                        technology.</p>
-                    <p>We have created for music bands, giant streaming platforms, pioneering science communicators, and
-                        even governmental cultural programs. Whether it is scripting, character design, live-action
-                        shoots, animation, or editing, our teams own the full pipeline and deliver ready-to-air content
-                        that feels alive.</p>
+            <div class="about-grid">
+                <div class="about-left">
+                    <h2 class="reveal-text" data-reveal>
+                        <span class="reveal-line"><span>Who</span></span>
+                        <span class="reveal-line"><span>We <span class="gradient-text">Are</span></span></span>
+                    </h2>
                 </div>
-                <div class="about-visual fade-in-right">
-                    <!-- Placeholder for a cool abstract image or the logo -->
-                    <img src="via-logo.png" alt="VIA Emblem" class="floating-logo">
+                <div class="about-right">
+                    <div class="about-block" data-animate>
+                        <p><strong>VIA</strong> is an audiovisual production agency built by filmmakers, designers, programmers, prompt engineers, screenwriters, musicians, and sound producers who thrive on experimentation.</p>
+                    </div>
+                    <div class="about-block" data-animate>
+                        <p>We make professional videos using AI tools to generate image, video, music, voices, and more -- always guided by human taste and craftsmanship. Our workflow blends field production with advanced generative systems.</p>
+                    </div>
+                    <div class="about-block" data-animate>
+                        <p>We have created for music bands, giant streaming platforms, pioneering science communicators, and governmental cultural programs. Whether it is scripting, character design, live-action, animation, or editing -- we own the full pipeline.</p>
+                    </div>
                 </div>
             </div>
         </div>
+        <div class="section-divider">
+            <div class="divider-line" data-animate></div>
+        </div>
     </section>
 
+    <!-- Partners -->
     <section id="partners" class="partners-section">
         <div class="container">
-            <div class="section-header fade-in">
-                <h2>Partners & Collaborators</h2>
-                <div class="line"></div>
-                <p class="partners-intro">Brands, institutions, and creators who trust VIA to design entire
-                    storyworlds—from science-forward animation to large-scale music launches.</p>
-            </div>
-            <div class="partners-grid">
-                <figure class="partner-logo">
-                    <img src="partners/XPLORA.png" alt="Xplora">
-                </figure>
-                <figure class="partner-logo">
-                    <img src="partners/Gelatina.png" alt="Gelatina">
-                </figure>
-                <figure class="partner-logo">
-                    <img src="partners/Anda Calabaza.png" alt="Anda Calabaza">
-                </figure>
-                <figure class="partner-logo">
-                    <img src="partners/Fundacion Si.png" alt="Fundación Sí">
-                </figure>
-                <figure class="partner-logo">
-                    <img src="partners/Kabradepata.png" alt="Kabradepata">
-                </figure>
-                <figure class="partner-logo">
-                    <img src="partners/Entre Ríos Gobierno.png" alt="Gobierno de Entre Ríos">
-                </figure>
-                <figure class="partner-logo">
-                    <img src="partners/El Perro en la Luna.png" alt="El Perro en la Luna">
-                </figure>
+            <h2 class="reveal-text" data-reveal>
+                <span class="reveal-line"><span>Partners &</span></span>
+                <span class="reveal-line"><span class="gradient-text">Collaborators</span></span>
+            </h2>
+            <div class="partners-marquee">
+                <div class="marquee-track">
+                    <figure class="partner-logo"><img src="partners/XPLORA.png" alt="Xplora"></figure>
+                    <figure class="partner-logo"><img src="partners/Gelatina.png" alt="Gelatina"></figure>
+                    <figure class="partner-logo"><img src="partners/Anda Calabaza.png" alt="Anda Calabaza"></figure>
+                    <figure class="partner-logo"><img src="partners/Fundacion Si.png" alt="Fundacion Si"></figure>
+                    <figure class="partner-logo"><img src="partners/Kabradepata.png" alt="Kabradepata"></figure>
+                    <figure class="partner-logo"><img src="partners/Entre Ríos Gobierno.png" alt="Gobierno de Entre Rios"></figure>
+                    <figure class="partner-logo"><img src="partners/El Perro en la Luna.png" alt="El Perro en la Luna"></figure>
+                    <!-- Duplicate for seamless loop -->
+                    <figure class="partner-logo"><img src="partners/XPLORA.png" alt="Xplora"></figure>
+                    <figure class="partner-logo"><img src="partners/Gelatina.png" alt="Gelatina"></figure>
+                    <figure class="partner-logo"><img src="partners/Anda Calabaza.png" alt="Anda Calabaza"></figure>
+                    <figure class="partner-logo"><img src="partners/Fundacion Si.png" alt="Fundacion Si"></figure>
+                    <figure class="partner-logo"><img src="partners/Kabradepata.png" alt="Kabradepata"></figure>
+                    <figure class="partner-logo"><img src="partners/Entre Ríos Gobierno.png" alt="Gobierno de Entre Rios"></figure>
+                    <figure class="partner-logo"><img src="partners/El Perro en la Luna.png" alt="El Perro en la Luna"></figure>
+                </div>
             </div>
         </div>
     </section>
 
-    <section id="work" class="work-section">
-        <div class="container">
-            <div class="section-header fade-in">
-                <h2>Our Productions</h2>
-                <div class="line"></div>
-            </div>
-
-            <div class="projects-grid">
-
-                <!-- Project 1: Lucha Clandestina -->
-                <article class="project-card fade-in-up">
-                    <div class="video-wrapper">
-                        <video controls poster="" preload="metadata">
-                            <source src="productions/Lucha Clandestina Episodio 1.mp4" type="video/mp4">
-                            Your browser does not support the video tag.
-                        </video>
-                    </div>
-                    <div class="project-info">
-                        <h3>Lucha Clandestina</h3>
-                        <p class="client">Client: <span class="highlight">Xplora</span></p>
-                        <p class="description">Pilot episode for renowned science network Xplora Snacks de Ciencia.
-                            Lucha roams a post-apocalyptic Quequén searching for forbidden knowledge. VIA handled
-                            scripting, character design, animation, and sound design.
-                        </p>
-                    </div>
-                </article>
-
-                <!-- Project 2: Comecocos -->
-                <article class="project-card fade-in-up">
-                    <div class="video-wrapper">
-                        <video controls preload="metadata">
-                            <source src="productions/Comecocos Episodio 1.mp4" type="video/mp4">
-                            Your browser does not support the video tag.
-                        </video>
-                    </div>
-                    <div class="project-info">
-                        <h3>Comecocos</h3>
-                        <p class="client">Client: <span class="highlight">Gelatina</span></p>
-                        <p class="description">A dreamy pilot for streaming giant Gelatina inspired by Borges and
-                            Cortázar. VIA crafted the visual language, character design, animation, and immersive sound
-                            to match the channel's massive fanbase.</p>
-                    </div>
-                </article>
-
-                <!-- Project 3: Himno Nacional -->
-                <article class="project-card fade-in-up">
-                    <div class="video-wrapper">
-                        <video controls preload="metadata">
-                            <source src="productions/Himno Nacional Argentino - Anda Calabaza.mp4" type="video/mp4">
-                            Your browser does not support the video tag.
-                        </video>
-                    </div>
-                    <div class="project-info">
-                        <h3>Argentinian National Anthem</h3>
-                        <p class="client">Client: <span class="highlight">Anda Calabaza & Fundación Sí</span></p>
-                        <p class="description">Commissioned by Anda Calabaza with Fundación Sí, this animated version of
-                            Argentina's anthem uses a narrative we scripted to invite children into the story, with
-                            original character design, animation, and editing by VIA.</p>
-                    </div>
-                </article>
-
-                <!-- Project 4: Kabradepata (Grouped or Featured) -->
-                <article class="project-card fade-in-up">
-                    <div class="video-wrapper">
-                        <video controls preload="metadata">
-                            <source src="productions/Hipo Hip Hop - Kabradepata.mp4" type="video/mp4">
-                            Your browser does not support the video tag.
-                        </video>
-                    </div>
-                    <div class="project-info">
-                        <h3>Kabradepata: Hipo Hip Hop</h3>
-                        <p class="client">Client: <span class="highlight">Kabradepata</span></p>
-                        <p class="description">First release of the new Kabradepata album campaign. We filmed the band,
-                            built illustrated universes, wrote scripts, and mixed animation with performance footage.</p>
-                    </div>
-                </article>
-
-                <article class="project-card fade-in-up">
-                    <div class="video-wrapper">
-                        <video controls preload="metadata">
-                            <source src="productions/Fiesta en la Cocina - Kabradepata.mp4" type="video/mp4">
-                            Your browser does not support the video tag.
-                        </video>
-                    </div>
-                    <div class="project-info">
-                        <h3>Kabradepata: Fiesta en la Cocina</h3>
-                        <p class="client">Client: <span class="highlight">Kabradepata</span></p>
-                        <p class="description">Episode two in the same campaign, where hand-crafted props, studio
-                            choreography, and AI-augmented animation turn a kitchen into a celebration of imagination.</p>
-                    </div>
-                </article>
-
-                <article class="project-card fade-in-up">
-                    <div class="video-wrapper">
-                        <video controls preload="metadata">
-                            <source src="productions/Viaje a la Luna - Kabradepata.mp4" type="video/mp4">
-                            Your browser does not support the video tag.
-                        </video>
-                    </div>
-                    <div class="project-info">
-                        <h3>Kabradepata: Viaje a la Luna</h3>
-                        <p class="client">Client: <span class="highlight">Kabradepata</span></p>
-                        <p class="description">Third music video for the series. VIA directed live-action shoots,
-                            crafted animated backdrops, and edited the whole journey so audiences travel alongside the
-                            band.</p>
-                    </div>
-                </article>
-
-                <!-- Project 5: Gurisa -->
-                <article class="project-card fade-in-up">
-                    <div class="video-wrapper">
-                        <video controls preload="metadata">
-                            <source src="productions/Gurisa, Chajá y Río - Pruebas.mp4" type="video/mp4">
-                            Your browser does not support the video tag.
-                        </video>
-                    </div>
-                    <div class="project-info">
-                        <h3>Gurisa, Chajá y Río</h3>
-                        <p class="client">Client: <span class="highlight">Gov. of Entre Ríos & El Perro en la
-                                Luna</span></p>
-                        <p class="description">In progress with El Perro en la Luna and the Government of Entre Ríos.
-                            "Gurisa, Chajá y Río" celebrates provincial traditions through stylized animation and early
-                            concept tests already showcasing our hybrid 2D/3D workflow.</p>
-                    </div>
-                </article>
-
-            </div>
-        </div>
-    </section>
-
+    <!-- Contact -->
     <section id="contact" class="contact-section">
         <div class="container">
-            <div class="contact-content fade-in-up">
-                <h2>Ready to Create the Impossible?</h2>
-                <p>Let's discuss your next project. Reach out for budgets, collaborations, or just to say hello.</p>
-                <a href="mailto:mneuronico@gmail.com?subject=Project%20Inquiry" class="btn primary-btn big-btn">Plan a Project with VIA</a>
+            <div class="contact-inner">
+                <h2 class="reveal-text" data-reveal>
+                    <span class="reveal-line"><span>Let's Create</span></span>
+                    <span class="reveal-line"><span>the <span class="gradient-text">Impossible</span></span></span>
+                </h2>
+                <p class="contact-sub" data-animate>Reach out for budgets, collaborations, or just to say hello.</p>
+                <a href="mailto:mneuronico@gmail.com?subject=Project%20Inquiry" class="contact-btn" data-magnetic>
+                    <span>Start a Project</span>
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+                        <path d="M7 17L17 7M17 7H7M17 7V17" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                </a>
             </div>
         </div>
     </section>
 
+    <!-- Footer -->
     <footer>
         <div class="container footer-content">
             <div class="footer-logo">
