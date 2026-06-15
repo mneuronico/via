@@ -246,17 +246,26 @@ document.addEventListener('DOMContentLoaded', () => {
         cards.forEach(card => {
             const playBtn = card.querySelector('.prod-card__play');
             const videoSrc = card.querySelector('video source');
-            if (!playBtn || !videoSrc) return;
+            const overlay = card.querySelector('.prod-card__overlay');
+            if (!playBtn || !overlay) return;
 
-            const openLightbox = (e) => {
+            // Cards with data-href navigate to an external page instead of
+            // opening the video lightbox.
+            const href = card.dataset.href;
+            const open = (e) => {
                 e.stopPropagation();
+                if (href) {
+                    window.open(href, '_blank', 'noopener');
+                    return;
+                }
+                if (!videoSrc) return;
                 lightboxVideo.src = videoSrc.getAttribute('src');
                 lightbox.classList.add('active');
                 document.body.style.overflow = 'hidden';
             };
 
-            playBtn.addEventListener('click', openLightbox);
-            card.querySelector('.prod-card__overlay').addEventListener('click', openLightbox);
+            playBtn.addEventListener('click', open);
+            overlay.addEventListener('click', open);
         });
 
         const closeLightbox = () => {
