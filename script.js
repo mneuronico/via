@@ -1,21 +1,46 @@
 document.addEventListener('DOMContentLoaded', () => {
 
+    const coarsePointer = window.matchMedia('(hover: none) and (pointer: coarse)').matches;
+    const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    // Anything that wants the main thread free (video playback, above all)
+    // registers a pause/resume pair here. Held by the lightbox while it is open.
+    const heavyWork = [];
+    let heavyPaused = false;
+    function pauseHeavyWork() {
+        if (heavyPaused) return;
+        heavyPaused = true;
+        heavyWork.forEach(w => w.pause());
+    }
+    function resumeHeavyWork() {
+        if (!heavyPaused) return;
+        heavyPaused = false;
+        heavyWork.forEach(w => w.resume());
+    }
+
     /* ==========================================================
        1. HERO CANVAS — Particle network (magenta + blue)
        ========================================================== */
     const canvas = document.getElementById('heroCanvas');
-    if (canvas) {
+    if (canvas && !reducedMotion) {
         const ctx = canvas.getContext('2d');
         let particles = [];
         let mouse = { x: -9999, y: -9999 };
-        const PARTICLE_COUNT = 80;
+        // The connection pass is O(n^2) per frame. On phones that cost lands on
+        // the same core that decodes video, so keep the particle count low and
+        // cap the backing-store resolution regardless of the device's DPR.
+        const PARTICLE_COUNT = coarsePointer ? 32 : 80;
         const CONNECTION_DIST = 150;
         const MOUSE_RADIUS = 200;
 
         function resize() {
-            canvas.width = canvas.offsetWidth * devicePixelRatio;
-            canvas.height = canvas.offsetHeight * devicePixelRatio;
-            ctx.scale(devicePixelRatio, devicePixelRatio);
+            // setTransform, not scale: scale() multiplies into the existing
+            // matrix, so every resize (and on mobile the address bar collapsing
+            // fires plenty) compounded the scale factor.
+            const dpr = Math.min(devicePixelRatio || 1, coarsePointer ? 1.5 : 2);
+            canvas.width = canvas.offsetWidth * dpr;
+            canvas.height = canvas.offsetHeight * dpr;
+            ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
         }
         resize();
         window.addEventListener('resize', resize);
@@ -85,13 +110,37 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         }
 
+        // The loop used to run forever, even with the hero scrolled far off
+        // screen or a video playing on top of it. It now only runs when it can
+        // actually be seen and nothing more important needs the frame budget.
+        let rafId = null;
+        let onScreen = true;
         function animateCanvas() {
             ctx.clearRect(0, 0, canvas.offsetWidth, canvas.offsetHeight);
             particles.forEach(p => { p.update(); p.draw(); });
             drawConnections();
-            requestAnimationFrame(animateCanvas);
+            rafId = requestAnimationFrame(animateCanvas);
         }
-        animateCanvas();
+        function startCanvas() {
+            if (rafId !== null || !onScreen || heavyPaused || document.hidden) return;
+            rafId = requestAnimationFrame(animateCanvas);
+        }
+        function stopCanvas() {
+            if (rafId === null) return;
+            cancelAnimationFrame(rafId);
+            rafId = null;
+        }
+        heavyWork.push({ pause: stopCanvas, resume: startCanvas });
+        document.addEventListener('visibilitychange', () => {
+            if (document.hidden) stopCanvas(); else startCanvas();
+        });
+        if ('IntersectionObserver' in window) {
+            new IntersectionObserver(entries => {
+                onScreen = entries[0].isIntersecting;
+                if (onScreen) startCanvas(); else stopCanvas();
+            }, { threshold: 0 }).observe(canvas);
+        }
+        startCanvas();
 
         const hero = document.getElementById('hero');
         if (hero) {
@@ -211,14 +260,19 @@ document.addEventListener('DOMContentLoaded', () => {
         const video = card.querySelector('video');
         if (!video) return;
 
-        // Hover: play preview
-        card.addEventListener('mouseenter', () => {
-            video.currentTime = 0;
-            video.play().catch(() => {});
-        });
-        card.addEventListener('mouseleave', () => {
-            video.pause();
-        });
+        // Hover: play preview. Touch browsers synthesise mouseenter on tap, so
+        // without this guard tapping a card would kick off a background decode
+        // right as the lightbox is trying to start the real one.
+        if (!coarsePointer) {
+            card.addEventListener('mouseenter', () => {
+                if (heavyPaused) return;
+                video.currentTime = 0;
+                video.play().catch(() => {});
+            });
+            card.addEventListener('mouseleave', () => {
+                video.pause();
+            });
+        }
 
         // Tilt effect (desktop)
         if (window.matchMedia('(pointer: fine)').matches) {
@@ -259,9 +313,22 @@ document.addEventListener('DOMContentLoaded', () => {
                     return;
                 }
                 if (!videoSrc) return;
+                // Free the device up for the one video that matters: stop the
+                // particle loop and any card preview still decoding in the
+                // background. Without this the phone was decoding several
+                // streams while running an O(n^2) canvas animation, which is
+                // what made playback stutter and then stall.
+                pauseHeavyWork();
+                cards.forEach(other => {
+                    const v = other.querySelector('video');
+                    if (v && !v.paused) v.pause();
+                });
                 lightboxVideo.src = videoSrc.getAttribute('src');
                 lightbox.classList.add('active');
                 document.body.style.overflow = 'hidden';
+                // Started from inside the tap handler, so it still counts as a
+                // user gesture and mobile browsers allow it to play with sound.
+                lightboxVideo.play().catch(() => {});
             };
 
             playBtn.addEventListener('click', open);
@@ -272,7 +339,10 @@ document.addEventListener('DOMContentLoaded', () => {
             lightbox.classList.remove('active');
             lightboxVideo.pause();
             lightboxVideo.removeAttribute('src');
+            // Without load() the browser keeps downloading the detached source.
+            lightboxVideo.load();
             document.body.style.overflow = '';
+            resumeHeavyWork();
         };
 
         lightboxClose.addEventListener('click', closeLightbox);

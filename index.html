@@ -198,7 +198,7 @@
 
                 <article class="prod-card prod-card--external" data-tilt data-href="https://www.losviajesdegurisa.com/">
                     <div class="prod-card__media">
-                        <video muted loop preload="metadata" playsinline poster="/shared/banners/los-viajes-de-gurisa.png">
+                        <video muted loop preload="metadata" playsinline poster="https://mneuronico.com/shared/banners/los-viajes-de-gurisa.png">
                             <source src="productions/Gurisa, Chajá y Río - Pruebas.mp4" type="video/mp4">
                         </video>
                         <div class="prod-card__overlay">
@@ -227,7 +227,12 @@
             </svg>
         </button>
         <div class="lightbox__content">
-            <video id="lightboxVideo" controls autoplay></video>
+            <!-- playsinline keeps iOS from hijacking playback into the native  -->
+            <!-- fullscreen player; preload="auto" lets the browser buffer ahead -->
+            <!-- instead of stalling a few seconds in. Playback is started from  -->
+            <!-- the tap handler in script.js so it counts as a user gesture and -->
+            <!-- is allowed to play with sound.                                  -->
+            <video id="lightboxVideo" controls playsinline preload="auto"></video>
         </div>
     </div>
 
